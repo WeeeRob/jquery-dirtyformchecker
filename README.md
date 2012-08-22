@@ -1,8 +1,8 @@
-jquery-dirtyformchecker
-=======================
+# jquery-dirtyformchecker #
 
-jQuery DirtyFormChecker: An alert prompt for checking if a form is dirty when leaving the page
-https://github.com/WeeeRob/jQuery-Plug-ins
+Version: 0.0.1a, Last updated: 22/08/2012
+
+An alert prompt for checking if a form is dirty when leaving the page
 
 This builds upon the work found here... 
 http://misterdai.yougeezer.co.uk/2010/06/04/jquery-form-changed-warning/
@@ -13,6 +13,8 @@ more functionality:
 *	Allowed a global or call or form specific
 *	Added saving form contents, i.e. if do an Ajax submit
 *	Allowed stopping checking on a form
+
+## TODO ##
 
 NOTE: Do we need to worry about when the submit method is called? 
 
@@ -56,3 +58,52 @@ https://github.com/Aversiste/RandomSig/blob/68b738d5ab9ee39bdcad79a6a2b6c4c01689
 TODO: jshint it
 
 TODO: Min / packed version
+
+
+## Documentation ##
+
+
+## Examples ##
+
+
+## Support and Testing ##
+Information about what version or versions of jQuery this plugin has been
+tested with, what browsers it has been tested in, and where the unit tests
+reside (so you can test it yourself).
+
+### jQuery Versions ###
+1.x.x
+
+### Browsers Tested ###
+Chrome 21. 
+
+### Unit Tests ###
+
+## Known issues ##
+
+## Release History ##
+
+1.0   - (dd/mm/yyyy) Initial release
+
+
+## License ##
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+Version 2, December 2004
+
+Copyright (C) 2012 Robert Walter <weeerob@gmail.com>
+
+Everyone is permitted to copy and distribute verbatim or modified
+copies of this license document, and changing it is allowed as long
+as the name is changed.
+
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+0. You just DO WHAT THE FUCK YOU WANT TO.
+
+## Support ##
+This program is free software. It comes without any warranty, to
+the extent permitted by applicable law. You can redistribute it
+and/or modify it under the terms of the Do What The Fuck You Want
+To Public License, Version 2, as published by Sam Hocevar. See
+http://sam.zoy.org/wtfpl/COPYING for more details.
