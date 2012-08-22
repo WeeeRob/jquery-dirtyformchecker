@@ -48,6 +48,7 @@ TODO: Help page, examples, so in addition to the current example page have thing
 Ajax example, stop example (think of a good reason where you'd use it?)
 
 TODO: Work out proper structure for the repository, releases, source, tests etc. 
+https://github.com/cowboy/jquery-bbq
 
 TODO: Find proper header for file, version, link, contact, that kind of jazz
 https://github.com/Aversiste/RandomSig/blob/68b738d5ab9ee39bdcad79a6a2b6c4c01689196d/randomsig.user.js
