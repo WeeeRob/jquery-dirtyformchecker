@@ -100,7 +100,10 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 	function stopAll(removeFully) {
 		for (var i = 0; i < dirtyFormCheckers.length; i++) {
-			dirtyFormCheckers.stop(removeFully);
+			dirtyFormCheckers[i].stop(removeFully);
+		}
+		if (removeFully) {
+			dirtyFormCheckers = [];
 		}
 	}
 
@@ -141,8 +144,6 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 				dirtyFormCheckers.splice(idx, 1);
 			}
 			this.$el.removeData('dirtyFormChecker');
-			// Will this work? 
-			delete this;
 		} else {
 			this.enabled = false;
 		}
@@ -187,6 +188,12 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 				else {
 					dirtyFormChecker.opt[otherArgs[0]] = otherArgs[1];
 					return;
+				}
+			}
+			else if (options === 'stop') {
+				dirtyFormChecker.stop(otherArgs);
+				if ((otherArgs.length == 1) && (otherArgs[0])) {
+					dirtyFormChecker = null;
 				}
 			}
 			else {
