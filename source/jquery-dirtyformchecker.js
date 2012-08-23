@@ -203,7 +203,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 			}
 			var dirtyFormChecker = $(this).data('dirtyFormChecker');
 			if (dirtyFormChecker) {
-				dirtyFormChecker.init(opt);
+				dirtyFormChecker.init(options);
 			}
 			else {
 				(new DirtyFormChecker(this, options));
