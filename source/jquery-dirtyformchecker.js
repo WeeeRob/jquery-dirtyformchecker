@@ -58,7 +58,9 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		changeClass: 'changed',
 		msgPageExit: 'One or more forms have changed! Unsaved changes will be lost.\nReally continue?',
 		msgFormSubmit: 'Another form has been changed! Unsaved changes will be lost.\nReally continue?', 
-		customFormSerialize : null
+		customFormSerialize : null, 
+		debug : false, 
+		ignoreElements : null
 	};
 
 	var dirtyFormCheckers = [];
@@ -118,6 +120,8 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 	DirtyFormChecker.prototype.serialize = function () {
 		if (this.opt.customFormSerialize) {
 			return this.opt.customFormSerialize(this.$el);
+		} else if (this.opt.ignoreElements !== null) {
+			return this.$el.find(':input').not(this.opt.ignoreElements).serialize();
 		}
 		
 		return this.$el.serialize();
@@ -147,7 +151,13 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 			return false;
 		}
 
-		if (this.serialize() !== this.formData) {
+		var newFormData = this.serialize();
+		if (newFormData !== this.formData) {
+			if (this.opt.debug) {
+				console.log('Old = ' + this.formData.replace(/&/g, '\n'));
+				console.log('New = ' + newFormData.replace(/&/g, '\n'));
+			}
+
 			this.$el.addClass(this.opt.changeClass);
 			return true;
 		}
@@ -170,6 +180,10 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 		var otherArgs = Array.prototype.slice.call(arguments, 1);
 		if (typeof options === 'string') {
+			if (options === 'stopAll') {
+				stopAll(otherArgs[0]);
+				return;
+			}
 			var dirtyFormChecker = $(this[0]).data('dirtyFormChecker');
 			if (dirtyFormChecker === null) {
 				return;
@@ -188,9 +202,6 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 				if ((otherArgs.length === 1) && (otherArgs[0])) {
 					dirtyFormChecker = null;
 				}
-			}
-			else if (options === 'stopAll') {
-				stopAll(otherArgs[0]);
 			}
 			else {
 				return dirtyFormChecker[options].apply(dirtyFormChecker, otherArgs);

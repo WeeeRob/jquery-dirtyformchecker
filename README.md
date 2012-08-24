@@ -30,23 +30,19 @@ TODO: Work out some different scenarios for the test cases and documentation ide
 *	Could we have a complex example with 3 forms on the page? Search / login / register where enabled for login and register but not search, custom messages so you know which form has been changed. 
 *	Ajax where form is hidden after submit and we call stop on it
 
-TODO: Have field names we can ignore if they change, maybe do by a filter selectors? $('input[name!=security]', this).serialize(); 
-
 TODO: Test stop functionality
 
 TODO: Test stopAll functionality
 
 TODO: Test save functionality
 
-TODO: Allow parameters in the message, e.g. a form name in msgFormSubmit
+TODO: Test on other browsers for that misterious possible beforeunload bug. 
+
+TODO: VS comments, references etc. 
 
 TODO: Set-up javascript unit testing environment (http://qunitjs.com/) see jQuery tests... https://github.com/jquery/jquery/tree/master/test/unit
 
-TODO: Test on other browsers for that misterious possible beforeunload bug. 
-
-TODO: Put it in GitHub
-
-TODO: VS comments, references etc. 
+TODO: Allow parameters in the message, e.g. a form name in msgFormSubmit
 
 TODO: Help page, examples, so in addition to the current example page have things like not working on a search / login form, 
 Ajax example, stop example (think of a good reason where you'd use it?)
@@ -55,6 +51,8 @@ TODO: Find proper header for file, version, link, contact, that kind of jazz
 https://github.com/Aversiste/RandomSig/blob/68b738d5ab9ee39bdcad79a6a2b6c4c01689196d/randomsig.user.js
 
 TODO: Build process? JSHint, Google Closure compiler shebang?
+
+TODO: Debug mode where we can log which element has changed etc.?
 
 ## Documentation ##
 
