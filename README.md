@@ -52,8 +52,6 @@ https://github.com/Aversiste/RandomSig/blob/68b738d5ab9ee39bdcad79a6a2b6c4c01689
 
 TODO: Build process? JSHint, Google Closure compiler shebang?
 
-TODO: Debug mode where we can log which element has changed etc.?
-
 ## Documentation ##
 
 
