@@ -1,4 +1,5 @@
-﻿/*
+﻿/*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:true, strict:true, undef:true, unused:true, curly:true, browser:true, devel:true, jquery:true, indent:4, maxerr:50 */
+/*
 jQuery DirtyFormChecker: An alert prompt for checking if a form is dirty when leaving the page
 https://github.com/WeeeRob/jQuery-Plug-ins
 
@@ -9,9 +10,11 @@ http://jsbin.com/amecu3
 Basically all I've done is refactored it as a plug-in and added a little bit
 more functionality:
 *	Allowed a global or call or form specific
+*	Allow options to be global or form specific
 *	Added saving form contents, i.e. if do an Ajax submit
 *	Allowed stopping checking on a form
-
+*	Provided a way to change options after they've been set
+*	Allow overriding of formSerialization, e.g. if there's an HTML editor or other form element that needs a call to update
 */
 /*
 DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
@@ -43,12 +46,12 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 	if (!Array.prototype.indexOf) {
 		Array.prototype.indexOf = function (value, start) {
 			for (var i = start || 0; i < this.length; i++) {
-				if (this[i] == value) {
+				if (this[i] === value) {
 					return i;
 				}
 			}
 			return -1;
-		}
+		};
 	}
 
 	var defaultOpt = {
@@ -66,16 +69,6 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		}
 	}
 
-	function getDatePicker(id) {
-		for (var i = 0; i < dirtyFormCheckers.length; i++) {
-			if (dirtyFormChecker[i].id === id) {
-				return dirtyFormChecker[i];
-			}
-		}
-
-		return null;
-	}
-
 	function submitFormChecker(e, dirtyFormChecker) {
 		var changes = anyFormChanges(dirtyFormChecker);
 		if ((changes) && (!confirm(dirtyFormChecker.opt.msgFormSubmit))) {
@@ -87,7 +80,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 	function anyFormChanges(dirtyFormChecker) {
 		for (var i = 0; i < dirtyFormCheckers.length; i++) {
-			if ((dirtyFormChecker) && (dirtyFormChecker == dirtyFormCheckers[i])) {
+			if ((dirtyFormChecker) && (dirtyFormChecker === dirtyFormCheckers[i])) {
 				continue;
 			}
 			if (dirtyFormCheckers[i].changed()) {
@@ -115,29 +108,29 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		dirtyFormCheckers.push(this);
 		this.init(opt);
 		this.$el.on('submit', $.proxy(this.submit, this));
-	}
+	};
 
 	DirtyFormChecker.prototype.init = function (opt) {
 		this.opt = opt;
 		this.save();
-	}
+	};
 
 	DirtyFormChecker.prototype.serialize = function () {
 		if (this.opt.customFormSerialize) {
-			return this.opt.customFormSerialize();
+			return this.opt.customFormSerialize(this.$el);
 		}
 		
 		return this.$el.serialize();
-	}
+	};
 
 	DirtyFormChecker.prototype.save = function () {
 		this.formData = this.serialize();
-	}
+	};
 
 	DirtyFormChecker.prototype.stop = function (removeFully) {
 		if (removeFully) {
 			var idx = dirtyFormCheckers.indexOf(this);
-			if (idx == -1) {
+			if (idx === -1) {
 				throw 'Cannot find dirtyFormChecker instance';
 			}
 			else {
@@ -147,7 +140,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		} else {
 			this.enabled = false;
 		}
-	}
+	};
 
 	DirtyFormChecker.prototype.changed = function () {
 		if (!this.enabled) {
@@ -161,28 +154,28 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 		this.$el.removeClass(this.opt.changeClass);
 		return false;
-	}
+	};
 
 	DirtyFormChecker.prototype.submit = function (e) {
 		return submitFormChecker(e, this);
-	}
+	};
 
 	var initialized = false;
 
 	$.fn.dirtyFormChecker = function (options) {
 
-		if ( !this.length ) {
+		if (!this.length) {
 			return this;
 		}
 
 		var otherArgs = Array.prototype.slice.call(arguments, 1);
-		if (typeof options == 'string') {
+		if (typeof options === 'string') {
 			var dirtyFormChecker = $(this[0]).data('dirtyFormChecker');
-			if (dirtyFormChecker == null) {
+			if (dirtyFormChecker === null) {
 				return;
 			}
-			if (options == 'option') {
-				if (otherArgs.length == 1) {
+			if (options === 'option') {
+				if (otherArgs.length === 1) {
 					return dirtyFormChecker.opt[otherArgs[0]];
 				}
 				else {
@@ -192,9 +185,12 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 			}
 			else if (options === 'stop') {
 				dirtyFormChecker.stop(otherArgs);
-				if ((otherArgs.length == 1) && (otherArgs[0])) {
+				if ((otherArgs.length === 1) && (otherArgs[0])) {
 					dirtyFormChecker = null;
 				}
+			}
+			else if (options === 'stopAll') {
+				stopAll(otherArgs[0]);
 			}
 			else {
 				return dirtyFormChecker[options].apply(dirtyFormChecker, otherArgs);
@@ -216,11 +212,11 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 				(new DirtyFormChecker(this, options));
 			}
 		});
-	}
+	};
 
 	$.dirtyFormChecker = function (options) {
 		options = $.extend({}, defaultOpt, options || {});
 		return $('form').dirtyFormChecker(options);
-	}
+	};
 
 })(jQuery);

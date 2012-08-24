@@ -11,12 +11,26 @@ http://jsbin.com/amecu3
 Basically all I've done is refactored it as a plug-in and added a little bit
 more functionality:
 *	Allowed a global or call or form specific
+* 	Allow options to be global or form specific
 *	Added saving form contents, i.e. if do an Ajax submit
 *	Allowed stopping checking on a form
+*	Provided a way to change options after they've been set
+*	Allow overriding of formSerialization, e.g. if there's an HTML editor or other form element that needs a call to update
 
 ## TODO ##
 
 NOTE: Do we need to worry about when the submit method is called? 
+
+TODO: Work out some different scenarios for the test cases and documentation ideas. multiple forms, one not enabled, HTML editor, ajax submit (update and stop), etc. 
+*	Simple form with link
+*	Two forms on a page
+*	Form where one of the items is an HTML form
+*	Two forms, one of them is search where it's not enabled
+*	Ajax form where form is submitted via ajax, then we save the data (keep form on page so we can leave after or make further changes
+*	Could we have a complex example with 3 forms on the page? Search / login / register where enabled for login and register but not search, custom messages so you know which form has been changed. 
+*	Ajax where form is hidden after submit and we call stop on it
+
+TODO: Have field names we can ignore if they change, maybe do by a filter selectors? $('input[name!=security]', this).serialize(); 
 
 TODO: Test stop functionality
 
@@ -28,8 +42,6 @@ TODO: Allow parameters in the message, e.g. a form name in msgFormSubmit
 
 TODO: Set-up javascript unit testing environment (http://qunitjs.com/) see jQuery tests... https://github.com/jquery/jquery/tree/master/test/unit
 
-TODO: Tidy up test page to make it work betterer. 
-
 TODO: Test on other browsers for that misterious possible beforeunload bug. 
 
 TODO: Put it in GitHub
@@ -39,16 +51,10 @@ TODO: VS comments, references etc.
 TODO: Help page, examples, so in addition to the current example page have things like not working on a search / login form, 
 Ajax example, stop example (think of a good reason where you'd use it?)
 
-TODO: Work out proper structure for the repository, releases, source, tests etc. 
-https://github.com/cowboy/jquery-bbq
-
 TODO: Find proper header for file, version, link, contact, that kind of jazz
 https://github.com/Aversiste/RandomSig/blob/68b738d5ab9ee39bdcad79a6a2b6c4c01689196d/randomsig.user.js
 
-TODO: jshint it
-
-TODO: Min / packed version
-
+TODO: Build process? JSHint, Google Closure compiler shebang?
 
 ## Documentation ##
 
@@ -62,10 +68,10 @@ tested with, what browsers it has been tested in, and where the unit tests
 reside (so you can test it yourself).
 
 ### jQuery Versions ###
-1.x.x
+1.8.x
 
 ### Browsers Tested ###
-Chrome 21. 
+Chrome 21, IE9 (IE8 compatiblity, IE7 compatiblity)
 
 ### Unit Tests ###
 
