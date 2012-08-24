@@ -54,6 +54,12 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		};
 	}
 
+	if (!Array.prototype.diff) {
+		Array.prototype.diff = function(a) {
+			return this.filter(function(i) {return !(a.indexOf(i) > -1);});
+		};
+	}
+
 	var defaultOpt = {
 		changeClass: 'changed',
 		msgPageExit: 'One or more forms have changed! Unsaved changes will be lost.\nReally continue?',
@@ -154,8 +160,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		var newFormData = this.serialize();
 		if (newFormData !== this.formData) {
 			if (this.opt.debug) {
-				console.log('Old = ' + this.formData.replace(/&/g, '\n'));
-				console.log('New = ' + newFormData.replace(/&/g, '\n'));
+				console.log(newFormData.split('&').diff(this.formData.split('&')));
 			}
 
 			this.$el.addClass(this.opt.changeClass);
