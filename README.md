@@ -34,9 +34,7 @@ TODO: Test stop functionality
 
 TODO: Test stopAll functionality
 
-TODO: Test save functionality
-
-TODO: Test on other browsers for that misterious possible beforeunload bug. 
+TODO: Test on other browsers for that mysterious possible beforeunload bug. 
 
 TODO: VS comments, references etc. 
 
@@ -52,6 +50,8 @@ https://github.com/Aversiste/RandomSig/blob/68b738d5ab9ee39bdcad79a6a2b6c4c01689
 
 TODO: Build process? JSHint, Google Closure compiler shebang?
 
+TODO: Need a way to mark a form as dirty once, e.g. if a form was submitted, to the server but came back and errored for some reason it won't have been saved though the plug-in will detect it as clean. 
+
 ## Documentation ##
 
 
@@ -59,7 +59,7 @@ TODO: Build process? JSHint, Google Closure compiler shebang?
 
 
 ## Support and Testing ##
-Information about what version or versions of jQuery this plugin has been
+Information about what version or versions of jQuery this plug-in has been
 tested with, what browsers it has been tested in, and where the unit tests
 reside (so you can test it yourself).
 
@@ -67,7 +67,7 @@ reside (so you can test it yourself).
 1.8.x
 
 ### Browsers Tested ###
-Chrome 21, IE9 (IE8 compatiblity, IE7 compatiblity)
+Chrome 21, IE9 (IE8 campatibility, IE7 campatibility)
 
 ### Unit Tests ###
 
