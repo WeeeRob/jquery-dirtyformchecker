@@ -1,7 +1,9 @@
-﻿/*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:true, strict:true, undef:true, unused:true, curly:true, browser:true, devel:true, jquery:true, indent:4, maxerr:50 */
+﻿/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1-vsdoc.js"/>
+
+/*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:true, strict:true, undef:true, unused:true, curly:true, browser:true, devel:true, jquery:true, indent:4, maxerr:50 */
 /*
 jQuery DirtyFormChecker: An alert prompt for checking if a form is dirty when leaving the page
-https://github.com/WeeeRob/jQuery-Plug-ins
+https://github.com/WeeeRob/jquery-dirtyformchecker
 
 This builds upon the work found here... 
 http://misterdai.yougeezer.co.uk/2010/06/04/jquery-form-changed-warning/
@@ -41,10 +43,27 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 (function ($) {
 
+	/// <summary>
+	/// Self executing function to give variable scope
+	/// </summary>
+	/// <param name="$" type="object">
+	/// jQuery
+	/// </param>
+
 	"use strict";
 
 	if (!Array.prototype.indexOf) {
 		Array.prototype.indexOf = function (value, start) {
+			/// <summary>
+			/// Finds the index of an item in the array
+			/// </summary>
+			/// <param name="value" type="object">
+			/// Value to search for
+			/// </param>
+			/// <param name="start" type="number">
+			/// Location to start
+			/// </param>
+			/// <returns type="number">Index of the found item or -1</returns>
 			for (var i = start || 0; i < this.length; i++) {
 				if (this[i] === value) {
 					return i;
@@ -56,7 +75,16 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 	if (!Array.prototype.diff) {
 		Array.prototype.diff = function(a) {
-			return this.filter(function(i) {return !(a.indexOf(i) > -1);});
+			/// <summary>
+			/// Returns the difference in the two arrays
+			/// </summary>
+			/// <param name="a" type="Array">
+			/// Array to check against
+			/// </param>
+			/// <returns type="Array">Array with the differing elements in</returns>
+			return this.filter(function(i) {
+				return !(a.indexOf(i) > -1);
+			});
 		};
 	}
 
@@ -69,15 +97,34 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		ignoreElements : null
 	};
 
+	/*
+	These are the selectors of the nasty DevExpress junk that it adds to the page which was the point of passing through
+	the ignoreElements selector
+	*/
+	/* ignoreElements : '[name$="$DDD$C"], [name$="$DDD$L"], [name$="_DDD_C_FNPWS"], [name$="_DDD_LCustomCallback"], [name$="_DDD_LDeletedItems"], [name$="_DDD_LInsertedItems"], [name$="_DDDWS"], [name$="_Raw"], [name$="_VI"], [name="DXMVCEditorsValues"], [name="DXScript"], [name*="$viewNavigatorBlock$"], [name*="$stateBlock$"], [name$="$CallbackState"], [name$="$DXSyncInput"]' */
+
 	var dirtyFormCheckers = [];
 
 	function pageUnloadChecker() {
+		/// <summary>
+		/// Page unload checker handler
+		/// </summary>
+		/// <returns type="string">Message to display on leaving the page</returns>
 		if (anyFormChanges()) {
 			return dirtyFormCheckers[0].opt.msgPageExit;
 		}
 	}
 
 	function submitFormChecker(e, dirtyFormChecker) {
+		/// <summary>
+		/// Submit handler for all the forms
+		/// </summary>
+		/// <param name="e" type="object">
+		/// Event object for the form submit
+		/// </param>
+		/// <param name="dirtyFormChecker" type="object">
+		/// Dirty form checker instance this submit relates to
+		/// </param>
 		var changes = anyFormChanges(dirtyFormChecker);
 		if ((changes) && (!confirm(dirtyFormChecker.opt.msgFormSubmit))) {
 			e.preventDefault();
@@ -87,6 +134,13 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 	}
 
 	function anyFormChanges(dirtyFormChecker) {
+		/// <summary>
+		/// Checks if there have been any form changes across all the forms we're checking
+		/// </summary>
+		/// <param name="dirtyFormChecker" type="object">
+		/// Optional dirtyFormChecker instance to ignore when checking
+		/// </param>
+		/// <returns type="boolean">True if there have been some changes, false otherwise</returns>
 		for (var i = 0; i < dirtyFormCheckers.length; i++) {
 			if ((dirtyFormChecker) && (dirtyFormChecker === dirtyFormCheckers[i])) {
 				continue;
@@ -100,6 +154,13 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 	}
 
 	function stopAll(removeFully) {
+		/// <summary>
+		/// Stops checking all elements
+		/// </summary>
+		/// <param name="removeFully" type="boolean">
+		/// Whether this should be a permanent change
+		/// </param>
+		/// <returns type="object"></returns>
 		for (var i = 0; i < dirtyFormCheckers.length; i++) {
 			dirtyFormCheckers[i].stop(removeFully);
 		}
@@ -109,6 +170,15 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 	}
 
 	var DirtyFormChecker = function (el, opt) {
+		/// <summary>
+		/// Constructor for the dirty form checker
+		/// </summary>
+		/// <param name="el" type="object">
+		/// Element to apply the object to
+		/// </param>
+		/// <param name="opt" type="object">
+		/// Options for this instance
+		/// </param>
 		this.$el = $(el);
 		this.formData = null;
 		this.enabled = true;
@@ -119,11 +189,22 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 	};
 
 	DirtyFormChecker.prototype.init = function (opt) {
+		/// <summary>
+		/// Initializes the container object
+		/// </summary>
+		/// <param name="opt" type="object">
+		/// Options for this instance
+		/// </param>
 		this.opt = opt;
 		this.save();
 	};
 
 	DirtyFormChecker.prototype.serialize = function () {
+		/// <summary>
+		/// Returns a serialized version of the form. This can either use the custom serialization, 
+		/// or default jQuery serialization excluding the ignore elements or everything. 
+		/// </summary>
+		/// <returns type="string">String representation of the form</returns>
 		if (this.opt.customFormSerialize) {
 			return this.opt.customFormSerialize(this.$el);
 		} else if (this.opt.ignoreElements !== null) {
@@ -134,10 +215,19 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 	};
 
 	DirtyFormChecker.prototype.save = function () {
+		/// <summary>
+		/// Saves the form status to the page
+		/// </summary>
 		this.formData = this.serialize();
 	};
 
 	DirtyFormChecker.prototype.stop = function (removeFully) {
+		/// <summary>
+		/// Stops checking the form for changes
+		/// </summary>
+		/// <param name="removeFully" type="boolean">
+		/// Whether this is a permanent stop
+		/// </param>
 		if (removeFully) {
 			var idx = dirtyFormCheckers.indexOf(this);
 			if (idx === -1) {
@@ -153,6 +243,10 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 	};
 
 	DirtyFormChecker.prototype.changed = function () {
+		/// <summary>
+		/// Method to work out if the form has been changed or not since last time we check. 
+		/// </summary>
+		/// <returns type="boolean">True if enabled and the form has changed, false otherwise</returns>
 		if (!this.enabled) {
 			return false;
 		}
@@ -172,12 +266,26 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 	};
 
 	DirtyFormChecker.prototype.submit = function (e) {
+		/// <summary>
+		/// Event handler for when the form is submitted
+		/// </summary>
+		/// <param name="e" type="Event">
+		/// Event object for the submit event
+		/// </param>
+		/// <returns type="boolean">True if the event should propgate (force of habbit, not actually used)</returns>
 		return submitFormChecker(e, this);
 	};
 
 	var initialized = false;
 
 	$.fn.dirtyFormChecker = function (options) {
+		/// <summary>
+		/// Runs dirtyFormChecker plug-in on the passed through items
+		/// </summary>
+		/// <param name="options" type="object">
+		/// Options object
+		/// </param>
+		/// <returns type="object">jQuery object containing the items this was applied to</returns>
 
 		if (!this.length) {
 			return this;
@@ -231,6 +339,14 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 	};
 
 	$.dirtyFormChecker = function (options) {
+		/// <summary>
+		/// Global method to apply plug-in to all form objects
+		/// </summary>
+		/// <param name="options" type="object">
+		/// optional object containing options for the plug-in
+		/// </param>
+		/// <returns type="object">jQuery object containing all forms on the page</returns>
+
 		options = $.extend({}, defaultOpt, options || {});
 		return $('form').dirtyFormChecker(options);
 	};

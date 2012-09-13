@@ -36,8 +36,6 @@ TODO: Test stopAll functionality
 
 TODO: Test on other browsers for that mysterious possible beforeunload bug. 
 
-TODO: VS comments, references etc. 
-
 TODO: Set-up javascript unit testing environment (http://qunitjs.com/) see jQuery tests... https://github.com/jquery/jquery/tree/master/test/unit
 
 TODO: Allow parameters in the message, e.g. a form name in msgFormSubmit
