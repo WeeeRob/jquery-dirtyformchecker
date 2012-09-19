@@ -1,4 +1,5 @@
 ﻿/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1-vsdoc.js"/>
+/// <reference path="ASPxScriptIntelliSense.js"/>
 
 /*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:true, strict:true, undef:true, unused:true, curly:true, browser:true, devel:true, jquery:true, indent:4, maxerr:50 */
 /*
@@ -94,7 +95,9 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		msgFormSubmit: 'Another form has been changed! Unsaved changes will be lost.\nReally continue?', 
 		customFormSerialize : null, 
 		debug : false, 
-		ignoreElements : null
+		ignoreElements : null, 
+		onDirty : null, 
+		alerts : true
 	};
 
 	/*
@@ -110,6 +113,10 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		/// Page unload checker handler
 		/// </summary>
 		/// <returns type="string">Message to display on leaving the page</returns>
+		if (!dirtyFormCheckers[0].opt.alerts) {
+			return;
+		}
+
 		if (anyFormChanges()) {
 			return dirtyFormCheckers[0].opt.msgPageExit;
 		}
@@ -126,7 +133,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		/// Dirty form checker instance this submit relates to
 		/// </param>
 		var changes = anyFormChanges(dirtyFormChecker);
-		if ((changes) && (!confirm(dirtyFormChecker.opt.msgFormSubmit))) {
+		if ((changes) && ((!dirtyFormChecker.opt.alerts) || (!confirm(dirtyFormChecker.opt.msgFormSubmit)))) {
 			e.preventDefault();
 		} else {
 			$(window).off('beforeunload', pageUnloadChecker);
@@ -186,6 +193,11 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		dirtyFormCheckers.push(this);
 		this.init(opt);
 		this.$el.on('submit', $.proxy(this.submit, this));
+
+		if (opt.onDirty != null) {
+			this.$inputs = this.$el.find(':input');
+			this.$inputs.on('change, keyup', $.proxy(this.inputChange, this));
+		}
 	};
 
 	DirtyFormChecker.prototype.init = function (opt) {
@@ -274,6 +286,19 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		/// </param>
 		/// <returns type="boolean">True if the event should propgate (force of habbit, not actually used)</returns>
 		return submitFormChecker(e, this);
+	};
+
+	DirtyFormChecker.prototype.inputChange = function (e) {
+		/// <summary>
+		/// Event handler for when a form input element changes
+		/// </summary>
+		/// <param name="e" type="Event">
+		/// Event object for the change event
+		/// </param>
+		/// <returns type="boolean">True if the event should propgate (force of habbit, not actually used)</returns>
+		if (this.changed()) {
+			this.opt.onDirty(this.$el, e);
+		}
 	};
 
 	var initialized = false;
