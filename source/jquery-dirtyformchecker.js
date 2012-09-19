@@ -195,8 +195,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		this.$el.on('submit', $.proxy(this.submit, this));
 
 		if (opt.onDirty != null) {
-			this.$inputs = this.$el.find(':input');
-			this.$inputs.on('change, keyup', $.proxy(this.inputChange, this));
+			this.$el.on('change keyup', ':input', $.proxy(this.inputChange, this));
 		}
 	};
 
@@ -296,7 +295,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		/// Event object for the change event
 		/// </param>
 		/// <returns type="boolean">True if the event should propgate (force of habbit, not actually used)</returns>
-		if (this.changed()) {
+		if ((this.opt.onDirty !== null) && (this.changed())) {
 			this.opt.onDirty(this.$el, e);
 		}
 	};
