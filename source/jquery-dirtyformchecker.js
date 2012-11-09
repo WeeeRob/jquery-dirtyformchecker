@@ -74,6 +74,18 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 		};
 	}
 
+	if (!('filter' in Array.prototype)) {
+		Array.prototype.filter = function(filter, that /*opt*/) {
+			var other = [], v;
+			for (var i = 0, n = this.length; i < n; i++) {
+				if (i in this && filter.call(that, v = this[i], i, this)) {
+					other.push(v);
+				}
+			}
+			return other;
+		};
+	}
+	
 	if (!Array.prototype.diff) {
 		Array.prototype.diff = function(a) {
 			/// <summary>
@@ -245,7 +257,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 				throw 'Cannot find dirtyFormChecker instance';
 			}
 			else {
-				dirtyFormCheckers.splice(idx, 1);
+				dirtyFormCheckers = dirtyFormCheckers.splice(idx, 1);
 			}
 			this.$el.removeData('dirtyFormChecker');
 		} else {
@@ -322,7 +334,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 				return;
 			}
 			var dirtyFormChecker = $(this[0]).data('dirtyFormChecker');
-			if (dirtyFormChecker === null) {
+			if ((dirtyFormChecker === null) || (dirtyFormChecker === undefined)) {
 				return;
 			}
 			if (options === 'option') {
@@ -339,6 +351,8 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 				if ((otherArgs.length === 1) && (otherArgs[0])) {
 					dirtyFormChecker = null;
 				}
+				
+				return;
 			}
 			else {
 				return dirtyFormChecker[options].apply(dirtyFormChecker, otherArgs);
